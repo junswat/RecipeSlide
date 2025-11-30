@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>レシピスライド</title>
+    <meta name="description" content="料理中に便利なレシピスライドビューワー">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF6B35">
+    <link rel="apple-touch-icon" href="https://fonts.gstatic.com/s/i/materialiconsround/restaurant_menu/v15/24px.svg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <span class="material-icons-round">restaurant_menu</span>
+                <h1>Recipe Slide</h1>
+            </div>
+            <div class="nav-actions">
+                <button id="btn-add-recipe" class="btn-icon" aria-label="レシピ追加">
+                    <span class="material-icons-round">add</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Views will be injected here -->
+
+            <!-- Board View (Default) -->
+            <div id="view-board" class="view active">
+                <div class="container">
+                    <div class="search-bar-container">
+                        <div class="search-input-wrapper">
+                            <span class="material-icons-round">search</span>
+                            <input type="text" id="search-input" placeholder="料理名で検索...">
+                        </div>
+                    </div>
+                    <div class="filter-bar">
+                        <button class="filter-chip active" data-category="all">すべて</button>
+                        <button class="filter-chip" data-category="japanese">和食</button>
+                        <button class="filter-chip" data-category="western">洋食</button>
+                        <button class="filter-chip" data-category="chinese">中華</button>
+                        <button class="filter-chip" data-category="other">その他</button>
+                        <button class="filter-chip" data-filter="favorite">
+                            <span class="material-icons-round" style="font-size: 16px;">favorite</span> お気に入り
+                        </button>
+                    </div>
+                    <div id="recipe-grid" class="recipe-grid">
+                        <!-- Recipe Cards will be generated here -->
+                        <div class="empty-state">
+                            <span class="material-icons-round">menu_book</span>
+                            <p>レシピがまだありません。<br>右上の＋ボタンから追加してください。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration View -->
+            <div id="view-register" class="view">
+                <div class="container">
+                    <div class="form-header">
+                        <h2>新規レシピ登録</h2>
+                        <button id="btn-close-register" class="btn-text">キャンセル</button>
+                    </div>
+                    <form id="recipe-form">
+                        <input type="hidden" id="recipe-id">
+                        <div class="form-group">
+                            <label for="recipe-category">カテゴリ</label>
+                            <select id="recipe-category" class="form-select">
+                                <option value="japanese">和食</option>
+                                <option value="western">洋食</option>
+                                <option value="chinese">中華</option>
+                                <option value="other" selected>その他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="markdown-input">Markdownテキスト</label>
+                            <textarea id="markdown-input"
+                                placeholder="# 料理名&#10;&#10;## 材料&#10;- ...&#10;&#10;## 手順&#10;1. ..."></textarea>
+                            <p class="hint">Perplexityなどで生成したMarkdownを貼り付けてください</p>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">保存する</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Slide View -->
+            <div id="view-slide" class="view">
+                <div class="slide-header">
+                    <button id="btn-back-board" class="btn-icon">
+                        <span class="material-icons-round">arrow_back</span>
+                    </button>
+                    <h2 id="slide-title">料理名</h2>
+                    <div class="slide-actions">
+                        <button id="btn-edit-recipe" class="btn-icon">
+                            <span class="material-icons-round">edit</span>
+                        </button>
+                        <button id="btn-delete-recipe" class="btn-icon">
+                            <span class="material-icons-round">delete</span>
+                        </button>
+                        <button id="btn-toggle-favorite" class="btn-icon">
+                            <span class="material-icons-round">favorite_border</span>
+                        </button>
+                        <button id="btn-settings" class="btn-icon">
+                            <span class="material-icons-round">settings</span>
+                        </button>
+                        <button id="btn-timer" class="btn-icon">
+                            <span class="material-icons-round">timer</span>
+                        </button>
+                        <button id="btn-shopping-list" class="btn-icon">
+                            <span class="material-icons-round">shopping_cart</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Settings Modal -->
+                <div id="settings-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>表示設定</h3>
+                            <button id="btn-close-settings" class="btn-icon">
+                                <span class="material-icons-round">close</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="setting-item">
+                                <label>文字サイズ</label>
+                                <div class="font-size-controls">
+                                    <button class="btn-font-size" data-size="small">小</button>
+                                    <button class="btn-font-size active" data-size="medium">中</button>
+                                    <button class="btn-font-size" data-size="large">大</button>
+                                    <button class="btn-font-size" data-size="xlarge">特大</button>
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <label>画面の自動オフ防止</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="wakelock-switch">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timer Modal -->
+                <div id="timer-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>タイマー</h3>
+                            <button id="btn-close-timer" class="btn-icon">
+                                <span class="material-icons-round">close</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="timer-display">
+                                <span id="timer-minutes">00</span>:<span id="timer-seconds">00</span>
+                            </div>
+                            <div class="timer-presets">
+                                <button class="btn-preset" data-time="60">1分</button>
+                                <button class="btn-preset" data-time="180">3分</button>
+                                <button class="btn-preset" data-time="300">5分</button>
+                                <button class="btn-preset" data-time="600">10分</button>
+                            </div>
+                            <div class="timer-controls">
+                                <button id="btn-start-timer" class="btn-primary">スタート</button>
+                                <button id="btn-reset-timer" class="btn-text">リセット</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shopping List Modal -->
+                <div id="shopping-list-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>買い物リスト</h3>
+                            <button id="btn-close-shopping-list" class="btn-icon">
+                                <span class="material-icons-round">close</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <ul id="shopping-list-items" class="shopping-list">
+                                <!-- Items will be injected here -->
+                            </ul>
+                            <div class="empty-state" id="shopping-list-empty" style="display: none;">
+                                <p>材料が見つかりませんでした。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Swiper -->
+                <div class="swiper">
+                    <div class="swiper-wrapper" id="swiper-wrapper">
+                        <!-- Slides will be injected here -->
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+
+    <!-- App Scripts -->
+    <script type="module" src="js/app.js"></script>
+</body>
+
+</html>
