@@ -5,8 +5,14 @@ let swiper;
 export function initSlider() {
     swiper = new Swiper('.swiper', {
         // Optional parameters
-        direction: 'horizontal',
+        direction: 'vertical',
         loop: false,
+
+        // Mousewheel control
+        mousewheel: {
+            invert: false,
+            forceToAxis: true,
+        },
 
         // Pagination
         pagination: {
@@ -23,7 +29,7 @@ export function initSlider() {
 
         // Effect
         effect: 'slide',
-        spaceBetween: 20,
+        spaceBetween: 50,
     });
 }
 
