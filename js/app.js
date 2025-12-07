@@ -89,6 +89,7 @@ function setupDOM() {
         shoppingListEmpty: document.getElementById('shopping-list-empty'),
         formHeader: document.querySelector('#view-register h2'),
         formSubmitBtn: document.getElementById('btn-save-recipe'),
+        formSubmitBtnText: document.getElementById('btn-save-text'),
         imagePreview: document.getElementById('image-preview'),
         uploadPlaceholder: document.querySelector('.upload-placeholder')
     };
@@ -340,7 +341,7 @@ function resetForm() {
     inputs.markdown.value = '';
     inputs.category.value = 'other';
     display.formHeader.textContent = '新規レシピ登録';
-    display.formSubmitBtn.textContent = '保存する';
+    display.formSubmitBtnText.textContent = '保存';
 
     // Reset Image
     inputs.image.value = '';
@@ -357,7 +358,7 @@ function populateForm(recipe) {
     inputs.markdown.value = recipe.markdownText;
     inputs.category.value = recipe.category;
     display.formHeader.textContent = 'レシピ編集';
-    display.formSubmitBtn.textContent = '更新する';
+    display.formSubmitBtnText.textContent = '更新';
 
     // Populate Image
     inputs.image.value = ''; // Clear file input
