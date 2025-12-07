@@ -83,8 +83,7 @@
                     <div class="form-header">
                         <button id="btn-close-register" class="btn-text">キャンセル</button>
                         <h2>新規レシピ登録</h2>
-                        <button type="submit" form="recipe-form" id="btn-save-recipe" class="btn-text"
-                            style="color: var(--primary-color); font-weight: bold;">保存</button>
+                        <div style="width: 60px;"></div>
                     </div>
                     <form id="recipe-form">
                         <input type="hidden" id="recipe-id">
@@ -123,6 +122,11 @@
                         <!-- Form actions removed -->
                     </form>
                 </div>
+                <!-- FAB Save Button -->
+                <button type="submit" form="recipe-form" id="btn-save-recipe" class="btn-fab-extended">
+                    <span class="material-icons-round">save</span>
+                    <span id="btn-save-text">保存</span>
+                </button>
             </div>
 
             <!-- Slide View -->
