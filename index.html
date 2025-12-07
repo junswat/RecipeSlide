@@ -96,6 +96,23 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="recipe-image">料理の画像</label>
+                            <div class="image-upload-container">
+                                <label class="image-upload-label">
+                                    <input type="file" id="recipe-image" accept="image/*" hidden>
+                                    <div class="upload-placeholder">
+                                        <span class="material-icons-round">add_a_photo</span>
+                                        <span>写真を選択</span>
+                                    </div>
+                                    <img id="image-preview" class="image-preview" style="display: none;">
+                                    <button type="button" id="btn-remove-image" class="btn-remove-image"
+                                        style="display: none;">
+                                        <span class="material-icons-round">close</span>
+                                    </button>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="markdown-input">Markdownテキスト</label>
                             <textarea id="markdown-input"
                                 placeholder="# 料理名&#10;&#10;## 材料&#10;- ...&#10;&#10;## 手順&#10;1. ..."></textarea>

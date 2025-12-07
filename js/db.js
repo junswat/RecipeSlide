@@ -9,6 +9,10 @@ export async function initDB() {
         recipes: '++id, title, category, favorite, createdAt'
     });
 
+    db.version(2).stores({
+        recipes: '++id, title, category, favorite, createdAt, image'
+    });
+
     console.log('DB Initialized');
 }
 

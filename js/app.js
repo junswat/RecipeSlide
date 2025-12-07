@@ -61,7 +61,8 @@ function setupDOM() {
         shoppingList: document.getElementById('btn-shopping-list'),
         closeShoppingList: document.getElementById('btn-close-shopping-list'),
         editRecipe: document.getElementById('btn-edit-recipe'),
-        deleteRecipe: document.getElementById('btn-delete-recipe')
+        deleteRecipe: document.getElementById('btn-delete-recipe'),
+        removeImage: document.getElementById('btn-remove-image')
     };
 
     forms = {
@@ -73,7 +74,8 @@ function setupDOM() {
         markdown: document.getElementById('markdown-input'),
         category: document.getElementById('recipe-category'),
         search: document.getElementById('search-input'),
-        wakeLock: document.getElementById('wakelock-switch')
+        wakeLock: document.getElementById('wakelock-switch'),
+        image: document.getElementById('recipe-image')
     };
 
     grids = {
@@ -86,7 +88,9 @@ function setupDOM() {
         shoppingList: document.getElementById('shopping-list-items'),
         shoppingListEmpty: document.getElementById('shopping-list-empty'),
         formHeader: document.querySelector('#view-register h2'),
-        formSubmitBtn: document.querySelector('#recipe-form button[type="submit"]')
+        formSubmitBtn: document.querySelector('#recipe-form button[type="submit"]'),
+        imagePreview: document.getElementById('image-preview'),
+        uploadPlaceholder: document.querySelector('.upload-placeholder')
     };
 }
 
@@ -193,10 +197,27 @@ function setupEventListeners() {
         }
     });
 
-    // Settings Modal
+    // Modals
     btns.settings.addEventListener('click', () => {
         modals.settings.classList.add('active');
     });
+
+    // Image Upload
+    inputs.image.addEventListener('change', handleImageSelect);
+    btns.removeImage.addEventListener('click', () => {
+        inputs.image.value = ''; // Clear file input
+        display.imagePreview.src = '';
+        display.imagePreview.style.display = 'none';
+        btns.removeImage.style.display = 'none';
+
+        // Show placeholder
+        const placeholder = document.querySelector('.upload-placeholder');
+        if (placeholder) placeholder.style.display = 'flex';
+
+        display.imagePreview.dataset.hasImage = 'false';
+    });
+
+    // Edit & Delete
     btns.closeSettings.addEventListener('click', () => {
         modals.settings.classList.remove('active');
     });
@@ -320,6 +341,15 @@ function resetForm() {
     inputs.category.value = 'other';
     display.formHeader.textContent = '新規レシピ登録';
     display.formSubmitBtn.textContent = '保存する';
+
+    // Reset Image
+    inputs.image.value = '';
+    display.imagePreview.src = '';
+    display.imagePreview.style.display = 'none';
+    btns.removeImage.style.display = 'none';
+    const placeholder = document.querySelector('.upload-placeholder');
+    if (placeholder) placeholder.style.display = 'flex';
+    display.imagePreview.dataset.hasImage = 'false';
 }
 
 function populateForm(recipe) {
@@ -328,6 +358,24 @@ function populateForm(recipe) {
     inputs.category.value = recipe.category;
     display.formHeader.textContent = 'レシピ編集';
     display.formSubmitBtn.textContent = '更新する';
+
+    // Populate Image
+    inputs.image.value = ''; // Clear file input
+    if (recipe.image) {
+        display.imagePreview.src = recipe.image;
+        display.imagePreview.style.display = 'block';
+        btns.removeImage.style.display = 'flex';
+        const placeholder = document.querySelector('.upload-placeholder');
+        if (placeholder) placeholder.style.display = 'none';
+        display.imagePreview.dataset.hasImage = 'true';
+    } else {
+        display.imagePreview.src = '';
+        display.imagePreview.style.display = 'none';
+        btns.removeImage.style.display = 'none';
+        const placeholder = document.querySelector('.upload-placeholder');
+        if (placeholder) placeholder.style.display = 'flex';
+        display.imagePreview.dataset.hasImage = 'false';
+    }
 }
 
 async function handleRecipeSubmit(e) {
@@ -353,6 +401,13 @@ async function handleRecipeSubmit(e) {
             category: category,
             updatedAt: new Date()
         };
+
+        // Handle Image
+        if (display.imagePreview.dataset.hasImage === 'true' && display.imagePreview.src) {
+            recipeData.image = display.imagePreview.src;
+        } else {
+            recipeData.image = null;
+        }
 
         if (id) {
             // Update existing
@@ -419,7 +474,6 @@ function renderRecipeGrid() {
         const card = document.createElement('div');
         card.className = 'recipe-card';
 
-        // Category Label Map
         const catMap = {
             'japanese': '和食',
             'western': '洋食',
@@ -427,10 +481,18 @@ function renderRecipeGrid() {
             'other': 'その他'
         };
 
-        card.innerHTML = `
+        let imageHtml = '';
+        if (recipe.image) {
+            imageHtml = `<div class="card-image" style="background-image: url('${recipe.image}'); background-size: cover; background-position: center;"></div>`;
+        } else {
+            imageHtml = `
             <div class="card-image">
                 <span class="material-icons-round" style="font-size: 48px; color: #ddd;">restaurant</span>
-            </div>
+            </div>`;
+        }
+
+        card.innerHTML = `
+            ${imageHtml}
             <div class="card-content">
                 <h3 class="card-title">${recipe.title}</h3>
                 <div class="card-meta">
@@ -593,4 +655,61 @@ function renderShoppingList() {
         `;
         listEl.appendChild(li);
     });
+}
+
+// Image Helper Functions
+function handleImageSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        alert('画像ファイルを選択してください');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        // Resize image before setting preview
+        resizeImage(e.target.result, 800, 600, (resizedDataUrl) => {
+            display.imagePreview.src = resizedDataUrl;
+            display.imagePreview.style.display = 'block';
+            btns.removeImage.style.display = 'flex';
+
+            // Hide placeholder
+            const placeholder = document.querySelector('.upload-placeholder');
+            if (placeholder) placeholder.style.display = 'none';
+
+            display.imagePreview.dataset.hasImage = 'true';
+        });
+    };
+    reader.readAsDataURL(file);
+}
+
+function resizeImage(base64Str, maxWidth, maxHeight, callback) {
+    const img = new Image();
+    img.src = base64Str;
+    img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        let ratio = 0;
+
+        if (width > maxWidth) {
+            ratio = maxWidth / width;
+            width = maxWidth;
+            height = height * ratio;
+        }
+
+        if (height > maxHeight) {
+            ratio = maxHeight / height;
+            height = maxHeight;
+            width = width * ratio;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        callback(canvas.toDataURL('image/jpeg', 0.7)); // Compress to 70% quality
+    };
 }
