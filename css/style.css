@@ -47,7 +47,10 @@ body {
     background-color: var(--background-color);
     color: var(--text-primary);
     line-height: 1.5;
+    line-height: 1.5;
     height: 100vh;
+    height: 100dvh;
+    /* Mobile browser fix */
     overflow: hidden;
     /* App-like feel */
 }
@@ -305,6 +308,11 @@ h3 {
 }
 
 /* Registration View */
+#view-register .container {
+    padding-bottom: 120px;
+    /* Ensure content is scrollable past keyboard/UI */
+}
+
 .form-header {
     display: flex;
     justify-content: space-between;
