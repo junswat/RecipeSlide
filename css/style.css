@@ -439,10 +439,7 @@ textarea:focus {
     background-color: var(--primary-color);
 }
 
-.swiper-button-next,
-.swiper-button-prev {
-    color: var(--primary-color);
-}
+
 
 /* Modal */
 .modal {

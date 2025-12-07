@@ -21,11 +21,7 @@ export function initSlider() {
             type: 'fraction', // 'bullets' | 'fraction' | 'progressbar' | 'custom'
         },
 
-        // Navigation arrows
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
+
 
         // Effect
         effect: 'slide',

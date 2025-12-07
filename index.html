@@ -152,78 +152,59 @@
                                 <div class="font-size-controls">
                                     <button class="btn-font-size" data-size="small">小</button>
                                     <button class="btn-font-size active" data-size="medium">中</button>
-                                    <button class="btn-font-size" data-size="large">大</button>
-                                    <button class="btn-font-size" data-size="xlarge">特大</button>
+                                    <div class="modal-header">
+                                        <h3>タイマー</h3>
+                                        <button id="btn-close-timer" class="btn-icon">
+                                            <span class="material-icons-round">close</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="timer-display">
+                                            <span id="timer-minutes">00</span>:<span id="timer-seconds">00</span>
+                                        </div>
+                                        <div class="timer-presets">
+                                            <button class="btn-preset" data-time="60">1分</button>
+                                            <button class="btn-preset" data-time="180">3分</button>
+                                            <button class="btn-preset" data-time="300">5分</button>
+                                            <button class="btn-preset" data-time="600">10分</button>
+                                        </div>
+                                        <div class="timer-controls">
+                                            <button id="btn-start-timer" class="btn-primary">スタート</button>
+                                            <button id="btn-reset-timer" class="btn-text">リセット</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="setting-item">
-                                <label>画面の自動オフ防止</label>
-                                <label class="switch">
-                                    <input type="checkbox" id="wakelock-switch">
-                                    <span class="slider round"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Timer Modal -->
-                <div id="timer-modal" class="modal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3>タイマー</h3>
-                            <button id="btn-close-timer" class="btn-icon">
-                                <span class="material-icons-round">close</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="timer-display">
-                                <span id="timer-minutes">00</span>:<span id="timer-seconds">00</span>
+                            <!-- Shopping List Modal -->
+                            <div id="shopping-list-modal" class="modal">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3>買い物リスト</h3>
+                                        <button id="btn-close-shopping-list" class="btn-icon">
+                                            <span class="material-icons-round">close</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <ul id="shopping-list-items" class="shopping-list">
+                                            <!-- Items will be injected here -->
+                                        </ul>
+                                        <div class="empty-state" id="shopping-list-empty" style="display: none;">
+                                            <p>材料が見つかりませんでした。</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="timer-presets">
-                                <button class="btn-preset" data-time="60">1分</button>
-                                <button class="btn-preset" data-time="180">3分</button>
-                                <button class="btn-preset" data-time="300">5分</button>
-                                <button class="btn-preset" data-time="600">10分</button>
-                            </div>
-                            <div class="timer-controls">
-                                <button id="btn-start-timer" class="btn-primary">スタート</button>
-                                <button id="btn-reset-timer" class="btn-text">リセット</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Shopping List Modal -->
-                <div id="shopping-list-modal" class="modal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3>買い物リスト</h3>
-                            <button id="btn-close-shopping-list" class="btn-icon">
-                                <span class="material-icons-round">close</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <ul id="shopping-list-items" class="shopping-list">
-                                <!-- Items will be injected here -->
-                            </ul>
-                            <div class="empty-state" id="shopping-list-empty" style="display: none;">
-                                <p>材料が見つかりませんでした。</p>
+                            <!-- Swiper -->
+                            <div class="swiper">
+                                <div class="swiper-wrapper" id="swiper-wrapper">
+                                    <!-- Slides will be injected here -->
+                                </div>
+                                <div class="swiper-pagination"></div>
+
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Swiper -->
-                <div class="swiper">
-                    <div class="swiper-wrapper" id="swiper-wrapper">
-                        <!-- Slides will be injected here -->
-                    </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
-            </div>
         </main>
     </div>
 
