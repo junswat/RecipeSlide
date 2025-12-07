@@ -100,13 +100,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupDOM();
 
     // Initialize DB
-    await initDB();
+    try {
+        await initDB();
+    } catch (err) {
+        console.error('DB Init Failed:', err);
+    }
 
     // Initialize Slider
-    initSlider();
+    try {
+        initSlider();
+    } catch (err) {
+        console.error('Slider Init Failed:', err);
+    }
 
     // Load Recipes
-    await loadRecipes();
+    try {
+        await loadRecipes();
+    } catch (err) {
+        console.error('Load Recipes Failed:', err);
+    }
 
     // Apply Settings
     applySettings();
