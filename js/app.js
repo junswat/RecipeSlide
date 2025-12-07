@@ -88,7 +88,7 @@ function setupDOM() {
         shoppingList: document.getElementById('shopping-list-items'),
         shoppingListEmpty: document.getElementById('shopping-list-empty'),
         formHeader: document.querySelector('#view-register h2'),
-        formSubmitBtn: document.querySelector('#recipe-form button[type="submit"]'),
+        formSubmitBtn: document.getElementById('btn-save-recipe'),
         imagePreview: document.getElementById('image-preview'),
         uploadPlaceholder: document.querySelector('.upload-placeholder')
     };

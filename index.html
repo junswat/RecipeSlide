@@ -81,8 +81,10 @@
             <div id="view-register" class="view">
                 <div class="container">
                     <div class="form-header">
-                        <h2>新規レシピ登録</h2>
                         <button id="btn-close-register" class="btn-text">キャンセル</button>
+                        <h2>新規レシピ登録</h2>
+                        <button type="submit" form="recipe-form" id="btn-save-recipe" class="btn-text"
+                            style="color: var(--primary-color); font-weight: bold;">保存</button>
                     </div>
                     <form id="recipe-form">
                         <input type="hidden" id="recipe-id">
@@ -118,9 +120,7 @@
                                 placeholder="# 料理名&#10;&#10;## 材料&#10;- ...&#10;&#10;## 手順&#10;1. ..."></textarea>
                             <p class="hint">Perplexityなどで生成したMarkdownを貼り付けてください</p>
                         </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primary">保存する</button>
-                        </div>
+                        <!-- Form actions removed -->
                     </form>
                 </div>
             </div>
