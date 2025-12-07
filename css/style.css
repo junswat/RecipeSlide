@@ -62,21 +62,6 @@ h3 {
 
 /* Layout */
 #app {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.container {
-    padding: var(--spacing-md);
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-/* Navbar */
-.navbar {
-    background-color: var(--surface-color);
     padding: var(--spacing-md);
     display: flex;
     justify-content: space-between;
