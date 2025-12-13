@@ -54,6 +54,7 @@ function setupDOM() {
     };
 
     btns = {
+        navbarSettings: document.getElementById('btn-open-settings-nav'),
         addRecipe: document.getElementById('btn-add-recipe'),
         closeRegister: document.getElementById('btn-close-register'),
         backBoard: document.getElementById('btn-back-board'),
@@ -163,6 +164,10 @@ function setupEventListeners() {
     filterChips = document.querySelectorAll('.filter-chip');
 
     // Navigation
+    btns.navbarSettings.addEventListener('click', () => {
+        modals.settings.classList.add('active');
+    });
+
     btns.addRecipe.addEventListener('click', () => {
         resetForm();
         switchView('register');
