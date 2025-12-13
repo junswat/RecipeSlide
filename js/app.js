@@ -1,8 +1,16 @@
 // Main Application Logic
 
-import { initDB, saveRecipe, getRecipes, updateRecipe, deleteRecipe } from './db.js';
+import { initDB, saveRecipe, getRecipes, updateRecipe, deleteRecipe, exportAllRecipes, importRecipes } from './db.js';
 import { parseToSlides, extractIngredients } from './markdown-parser.js';
 import { initSlider, loadSlides } from './slider.js';
+
+// Persistent Storage Request
+async function requestPersistence() {
+    if (navigator.storage && navigator.storage.persist) {
+        const isPersisted = await navigator.storage.persist();
+        console.log(`Persisted storage granted: ${isPersisted}`);
+    }
+}
 
 // State
 let recipes = [];
@@ -62,7 +70,11 @@ function setupDOM() {
         closeShoppingList: document.getElementById('btn-close-shopping-list'),
         editRecipe: document.getElementById('btn-edit-recipe'),
         deleteRecipe: document.getElementById('btn-delete-recipe'),
-        removeImage: document.getElementById('btn-remove-image')
+        editRecipe: document.getElementById('btn-edit-recipe'),
+        deleteRecipe: document.getElementById('btn-delete-recipe'),
+        removeImage: document.getElementById('btn-remove-image'),
+        backup: document.getElementById('btn-backup'),
+        restore: document.getElementById('btn-restore')
     };
 
     forms = {
@@ -75,7 +87,8 @@ function setupDOM() {
         category: document.getElementById('recipe-category'),
         search: document.getElementById('search-input'),
         wakeLock: document.getElementById('wakelock-switch'),
-        image: document.getElementById('recipe-image')
+        image: document.getElementById('recipe-image'),
+        restoreFile: document.getElementById('restore-file-input')
     };
 
     grids = {
@@ -103,6 +116,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Setup DOM elements
     setupDOM();
+
+    // Request Persistent Storage
+    requestPersistence();
 
     // Initialize DB
     try {
@@ -216,6 +232,49 @@ function setupEventListeners() {
         if (placeholder) placeholder.style.display = 'flex';
 
         display.imagePreview.dataset.hasImage = 'false';
+    });
+
+    // Backup & Restore
+    btns.backup.addEventListener('click', async () => {
+        try {
+            const json = await exportAllRecipes();
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `recipes_backup_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error('Backup failed:', err);
+            alert('バックアップに失敗しました');
+        }
+    });
+
+    btns.restore.addEventListener('click', () => {
+        inputs.restoreFile.click();
+    });
+
+    inputs.restoreFile.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            try {
+                const json = e.target.result;
+                await importRecipes(json);
+                alert('復元が完了しました');
+                await loadRecipes(); // Reload grid
+                inputs.restoreFile.value = ''; // Reset input
+            } catch (err) {
+                console.error('Restore failed:', err);
+                alert('復元に失敗しました。ファイル形式が正しいか確認してください。');
+            }
+        };
+        reader.readAsText(file);
     });
 
     // Edit & Delete

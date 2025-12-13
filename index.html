@@ -184,6 +184,22 @@
                                     <span class="slider round"></span>
                                 </label>
                             </div>
+                            <div class="setting-item">
+                                <label>データ管理</label>
+                                <div class="data-management-controls" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button id="btn-backup" class="btn-preset"
+                                        style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                                        <span class="material-icons-round" style="font-size: 18px;">download</span>
+                                        バックアップ
+                                    </button>
+                                    <button id="btn-restore" class="btn-preset"
+                                        style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                                        <span class="material-icons-round" style="font-size: 18px;">upload</span> 復元
+                                    </button>
+                                </div>
+                                <input type="file" id="restore-file-input" accept=".json" style="display: none;">
+                                <p class="hint" style="margin-top: 8px;">ブラウザの履歴削除などで消えないよう、データをファイルとして保存できます。</p>
+                            </div>
                         </div>
                     </div>
                 </div>
