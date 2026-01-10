@@ -1,4 +1,4 @@
-const CACHE_NAME = 'recipe-slide-v5';
+const CACHE_NAME = 'recipe-slide-v6';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

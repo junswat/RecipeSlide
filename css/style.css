@@ -69,6 +69,15 @@ h3 {
     height: 100%;
 }
 
+#main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+}
+
 .container {
     padding: var(--spacing-md);
     max-width: 1200px;
